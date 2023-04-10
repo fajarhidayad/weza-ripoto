@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { GlobalStateContext } from "../context";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import "dayjs/locale/en";
 
 interface WeatherCardProps {

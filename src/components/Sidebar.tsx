@@ -4,7 +4,7 @@ import { IoLocationSharp } from "react-icons/io5";
 import { GlobalStateContext } from "../context";
 import SearchSidebar from "./SearchSidebar";
 
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import "dayjs/locale/en";
 
 const Sidebar = () => {
