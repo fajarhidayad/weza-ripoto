@@ -4,18 +4,21 @@ import { FaLocationDot } from "react-icons/fa6";
 import BgCloud from "../assets/img/Cloud-background.png";
 import { MeasurementContext } from "../hooks/MeasurementContextProvider";
 import { WeatherContext } from "../hooks/WeatherProvider";
-import * as dayjs from "dayjs";
-import weatherIconData from "../assets/weatherCodes.json";
+import moment from "moment";
+import { weatherIcon } from "../assets/weatherCodes";
 import { getIcon } from "../iconography";
 
 const Sidebar = () => {
   const measurementContext = React.useContext(MeasurementContext);
   const weatherContext = React.useContext(WeatherContext);
-  const now = dayjs(new Date()).format("dddd, D MMM");
+  const today = new Date();
+  const now = moment(today).format("dddd, D MMM");
 
-  const icon = weatherIconData.find(
+  const icon = weatherIcon.find(
     (item) => item.code === weatherContext?.weatherData?.current.condition_code
   );
+
+  const iconSrc = getIcon(icon!.icon);
 
   const temp =
     measurementContext?.measurement === "C"
@@ -42,7 +45,7 @@ const Sidebar = () => {
           height={500}
         />
         <img
-          src={getIcon(icon!.icon)}
+          src={iconSrc}
           alt="weather-icon"
           className="relative z-10 w-[100px] lg:w-[200px]"
         />
