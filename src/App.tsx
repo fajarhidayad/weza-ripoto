@@ -11,7 +11,6 @@ const App = () => {
     { latitude: number; longitude: number } | undefined
   >(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const getWeatherData = useCallback(
     async (lat: number, long: number) => {
@@ -23,9 +22,9 @@ const App = () => {
   );
 
   useEffect(() => {
-    if (latlong) {
+    if (latlong && isLoading) {
       getWeatherData(latlong.latitude, latlong.longitude);
-    } else {
+    } else if (!latlong && isLoading) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setLatLong({
@@ -35,17 +34,14 @@ const App = () => {
         },
         (err) => {
           if (err.code == err.PERMISSION_DENIED) {
-            setErrorMessage(
-              "Permission Denied. This app cannot run without access of your location"
-            );
             setIsLoading(false);
           }
         }
       );
     }
-  }, [latlong, getWeatherData]);
+  }, [latlong, isLoading, getWeatherData]);
 
-  if (isLoading && !errorMessage) {
+  if (isLoading) {
     return (
       <main className="bg-dark min-h-screen text-t-light flex items-center justify-center">
         <ImSpinner2 size={35} className="animate-spin" />
@@ -55,13 +51,22 @@ const App = () => {
 
   if (!latlong) {
     return (
-      <main className="bg-dark min-h-screen text-t-light flex items-center justify-center">
-        <h1 className="text-center text-xl max-w-[800px] mx-3">
+      <main className="bg-dark min-h-screen text-t-light flex flex-col items-center justify-center">
+        <h1 className="text-center text-xl max-w-[800px] mx-3 mb-5">
           This website uses your location to provide you with personalized
           experiences and relevant information. By allowing access to your
           location, you can enjoy features to get weather forecasts and
           conditions specific to your area.
         </h1>
+        <p className="text-center max-w-[600px] mx-3 mb-2">
+          Already activated?
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-t-dark rounded px-4 py-3 shadow"
+        >
+          Click to reload page
+        </button>
       </main>
     );
   }

@@ -20,6 +20,29 @@ export interface WeatherData {
   localTime: string;
   country: string;
   current: CurrentWeatherType;
+  forecast: ForecastDayType[];
+}
+
+export interface ForecastDayType {
+  date: string;
+  mintemp_c: number;
+  mintemp_f: number;
+  maxtemp_c: number;
+  maxtemp_f: number;
+  code: number;
+}
+
+interface ForecastType {
+  date: string;
+  day: {
+    mintemp_c: number;
+    mintemp_f: number;
+    maxtemp_c: number;
+    maxtemp_f: number;
+    condition: {
+      code: number;
+    };
+  };
 }
 
 export const getWeatherReport = async (latitude: number, longitude: number) => {
@@ -28,14 +51,24 @@ export const getWeatherReport = async (latitude: number, longitude: number) => {
       params: {
         key: API_KEY,
         q: `${latitude},${longitude}`,
+        days: 5,
       },
     });
-    const { location, current } = response.data;
+    const { location, current, forecast } = response.data;
+    const forecastDays = forecast.forecastday.map((item: ForecastType) => ({
+      mintemp_c: item.day.mintemp_c,
+      mintemp_f: item.day.mintemp_f,
+      maxtemp_c: item.day.maxtemp_c,
+      maxtemp_f: item.day.maxtemp_f,
+      date: item.date,
+      code: item.day.condition.code,
+    }));
 
     return {
       cityName: location.name,
       localTime: location.localtime,
       country: location.country,
+      forecast: forecastDays,
       current: {
         temp_c: current.temp_c,
         temp_f: current.temp_f,

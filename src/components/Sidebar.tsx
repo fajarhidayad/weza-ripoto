@@ -1,14 +1,21 @@
 import React from "react";
 import { BiCurrentLocation } from "react-icons/bi";
 import { FaLocationDot } from "react-icons/fa6";
-import LightCloud from "../assets/img/LightCloud.png";
 import BgCloud from "../assets/img/Cloud-background.png";
 import { MeasurementContext } from "../hooks/MeasurementContextProvider";
 import { WeatherContext } from "../hooks/WeatherProvider";
+import * as dayjs from "dayjs";
+import weatherIconData from "../assets/weatherCodes.json";
+import { getIcon } from "../iconography";
 
 const Sidebar = () => {
   const measurementContext = React.useContext(MeasurementContext);
   const weatherContext = React.useContext(WeatherContext);
+  const now = dayjs(new Date()).format("dddd, D MMM");
+
+  const icon = weatherIconData.find(
+    (item) => item.code === weatherContext?.weatherData?.current.condition_code
+  );
 
   const temp =
     measurementContext?.measurement === "C"
@@ -16,14 +23,14 @@ const Sidebar = () => {
       : weatherContext?.weatherData?.current.temp_f;
 
   return (
-    <aside className="flex flex-col lg:w-[400px] bg-primary py-8 overflow-hidden h-screen">
-      <div className="flex justify-between items-stretch mb-5 px-8">
-        <button className="bg-[#6E707A] px-4 py-3 text-white">
+    <aside className="flex flex-col lg:w-[400px] bg-primary py-4 lg:py-8 overflow-hidden min-h-screen">
+      <div className="flex justify-between items-stretch mb-5 px-4 lg:px-8">
+        <button className="bg-[#6E707A] px-3 py-2 lg:px-4 lg:py-3 text-white text-sm lg:text-base">
           Search for places
         </button>
 
         <button className="bg-[#6E707A] p-2 text-white rounded-full h-12 w-12 flex items-center justify-center">
-          <BiCurrentLocation size={25} />
+          <BiCurrentLocation className="text-xl lg:text-2xl" />
         </button>
       </div>
 
@@ -31,32 +38,33 @@ const Sidebar = () => {
         <img
           src={BgCloud}
           alt="cloud-bg"
-          className="absolute opacity-5 top-0 bottom-0"
+          className="absolute opacity-5 top-0 bottom-0 hidden lg:block"
           height={500}
         />
         <img
-          src={LightCloud}
+          src={getIcon(icon!.icon)}
           alt="weather-icon"
-          width={200}
-          className="relative z-10"
+          className="relative z-10 w-[100px] lg:w-[200px]"
         />
       </div>
 
       <div className="flex items-baseline justify-center">
-        <h1 className="text-white text-[100px] font-medium">{temp}</h1>
+        <h1 className="text-white text-6xl lg:text-[100px] font-medium">
+          {temp}
+        </h1>
         <span className="text-5xl text-t-dark font-light">
           &deg;{measurementContext?.measurement}
         </span>
       </div>
 
-      <h2 className="text-center text-t-dark text-3xl mt-auto mb-20">
+      <h2 className="text-center text-t-dark text-3xl my-auto">
         {weatherContext?.weatherData?.current.condition_text}
       </h2>
 
       <div className="flex justify-center items-center space-x-3 text-t-dark mb-5">
         <p>Today</p>
         <span>&bull;</span>
-        <p>Fri, 5 Jun</p>
+        <p>{now}</p>
       </div>
       <div className="flex justify-center items-center text-t-dark space-x-3">
         <FaLocationDot />

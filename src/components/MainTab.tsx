@@ -4,21 +4,24 @@ import DailyCard from "./DailyCard";
 import HighlightCard from "./HighlightCard";
 import { MeasurementContext } from "../hooks/MeasurementContextProvider";
 import { WeatherContext } from "../hooks/WeatherProvider";
-import { CurrentWeatherType } from "../api";
+import { CurrentWeatherType, ForecastDayType } from "../api";
 
 const MainTab = () => {
   const measurementContext = React.useContext(MeasurementContext);
   const weatherContext = React.useContext(WeatherContext);
 
   return (
-    <section className="pt-10 flex-1 px-10 xl:px-20">
+    <section className="pt-6 flex-1 px-4 lg:px-10 xl:px-20 pb-5">
       <ButtonTab
         changeMeasurement={measurementContext!.changeMeasurement}
         measurement={measurementContext!.measurement}
       />
-      <DailyTab measurement={measurementContext!.measurement} />
+      <DailyTab
+        measurement={measurementContext!.measurement}
+        forecast={weatherContext!.weatherData!.forecast}
+      />
 
-      <h1 className="text-2xl font-bold mb-8">Today's Highlights</h1>
+      <h1 className="text-2xl font-bold mb-5">Today's Highlights</h1>
       <HighlightTab {...weatherContext?.weatherData?.current} />
     </section>
   );
@@ -36,7 +39,7 @@ const ButtonTab = (props: {
   };
 
   return (
-    <div className="flex justify-end items-center mb-16 space-x-3">
+    <div className="flex justify-end items-center mb-6 space-x-3">
       <button
         className={`w-10 h-10 rounded-full font-bold text-lg ${buttonCheck(
           "C"
@@ -57,39 +60,22 @@ const ButtonTab = (props: {
   );
 };
 
-const DailyTab = (props: { measurement: string }) => {
+const DailyTab = (props: {
+  measurement: "C" | "F";
+  forecast: ForecastDayType[];
+}) => {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 xl:gap-5 mb-14">
-      <DailyCard
-        date="Tomorrow"
-        minTemp={11}
-        maxTemp={16}
-        measurement={props.measurement}
-      />
-      <DailyCard
-        date="Tomorrow"
-        minTemp={11}
-        maxTemp={16}
-        measurement={props.measurement}
-      />
-      <DailyCard
-        date="Tomorrow"
-        minTemp={11}
-        maxTemp={16}
-        measurement={props.measurement}
-      />
-      <DailyCard
-        date="Tomorrow"
-        minTemp={11}
-        maxTemp={16}
-        measurement={props.measurement}
-      />
-      <DailyCard
-        date="Tomorrow"
-        minTemp={11}
-        maxTemp={16}
-        measurement={props.measurement}
-      />
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 xl:gap-5 mb-8">
+      {props.forecast.map((item) => (
+        <DailyCard
+          key={item.date}
+          date={item.date}
+          measurement={props.measurement}
+          maxTemp={props.measurement === "C" ? item.maxtemp_c : item.maxtemp_f}
+          minTemp={props.measurement === "C" ? item.mintemp_c : item.mintemp_f}
+          code={item.code}
+        />
+      ))}
     </div>
   );
 };
