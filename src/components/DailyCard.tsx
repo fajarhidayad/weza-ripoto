@@ -12,9 +12,10 @@ interface DailyCardProps {
 }
 
 const DailyCard: React.FC<DailyCardProps> = (props) => {
-  const day = dayjs(props.date).isSame(dayjs(), "day")
+  const today = new Date();
+  const day = dayjs(props.date).isSame(today, "day")
     ? "Today"
-    : dayjs(dayjs()).add(1, "day").isSame(props.date, "day")
+    : dayjs(today).add(1, "day").isSame(props.date, "day")
     ? "Tomorrow"
     : dayjs(props.date).format("ddd, D MMM");
 
