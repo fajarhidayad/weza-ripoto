@@ -3,9 +3,12 @@ import { FaLocationArrow } from "react-icons/fa6";
 import DailyCard from "./DailyCard";
 import HighlightCard from "./HighlightCard";
 import { MeasurementContext } from "../hooks/MeasurementContextProvider";
+import { WeatherContext } from "../hooks/WeatherProvider";
+import { CurrentWeatherType } from "../api";
 
 const MainTab = () => {
   const measurementContext = React.useContext(MeasurementContext);
+  const weatherContext = React.useContext(WeatherContext);
 
   return (
     <section className="pt-10 flex-1 px-10 xl:px-20">
@@ -16,7 +19,7 @@ const MainTab = () => {
       <DailyTab measurement={measurementContext!.measurement} />
 
       <h1 className="text-2xl font-bold mb-8">Today's Highlights</h1>
-      <HighlightTab />
+      <HighlightTab {...weatherContext?.weatherData?.current} />
     </section>
   );
 };
@@ -91,18 +94,22 @@ const DailyTab = (props: { measurement: string }) => {
   );
 };
 
-const HighlightTab = () => {
+const HighlightTab: React.FC<Partial<CurrentWeatherType>> = (props) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 xl:gap-6">
-      <HighlightCard title="Wind status" subtitle="7" measure="mph">
+      <HighlightCard
+        title="Wind status"
+        subtitle={props.wind_mph}
+        measure="mph"
+      >
         <div className="flex items-center space-x-3">
           <div className="bg-t-dark rounded-full p-2">
             <FaLocationArrow />
           </div>
-          <p>WSW</p>
+          <p>{props.wind_dir}</p>
         </div>
       </HighlightCard>
-      <HighlightCard title="Humidity" subtitle="84" measure="%">
+      <HighlightCard title="Humidity" subtitle={props.humidity} measure="%">
         <div className="w-4/5">
           <div className="flex justify-between items-center text-xs text-t-dark mb-1">
             <span>0</span>
@@ -111,14 +118,22 @@ const HighlightTab = () => {
           </div>
           <div className="bg-white rounded-full h-2 ">
             <div
-              className="bg-yellow-200 h-2 rounded-full"
-              style={{ width: `${84}%` }}
+              className="bg-yellow-300 h-2 rounded-full"
+              style={{ width: `${props.humidity}%` }}
             />
           </div>
         </div>
       </HighlightCard>
-      <HighlightCard title="Visibility" subtitle="6,4" measure="miles" />
-      <HighlightCard title="Air Pressure" subtitle="998" measure="mb" />
+      <HighlightCard
+        title="Visibility"
+        subtitle={props.vis_miles}
+        measure="miles"
+      />
+      <HighlightCard
+        title="Air Pressure"
+        subtitle={props.pressure_mb}
+        measure="mb"
+      />
     </div>
   );
 };

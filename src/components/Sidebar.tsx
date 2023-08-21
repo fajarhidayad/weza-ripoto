@@ -4,9 +4,16 @@ import { FaLocationDot } from "react-icons/fa6";
 import LightCloud from "../assets/img/LightCloud.png";
 import BgCloud from "../assets/img/Cloud-background.png";
 import { MeasurementContext } from "../hooks/MeasurementContextProvider";
+import { WeatherContext } from "../hooks/WeatherProvider";
 
 const Sidebar = () => {
   const measurementContext = React.useContext(MeasurementContext);
+  const weatherContext = React.useContext(WeatherContext);
+
+  const temp =
+    measurementContext?.measurement === "C"
+      ? weatherContext?.weatherData?.current.temp_c
+      : weatherContext?.weatherData?.current.temp_f;
 
   return (
     <aside className="flex flex-col lg:w-[400px] bg-primary py-8 overflow-hidden h-screen">
@@ -36,13 +43,15 @@ const Sidebar = () => {
       </div>
 
       <div className="flex items-baseline justify-center">
-        <h1 className="text-white text-[100px] font-medium">15</h1>
+        <h1 className="text-white text-[100px] font-medium">{temp}</h1>
         <span className="text-5xl text-t-dark font-light">
           &deg;{measurementContext?.measurement}
         </span>
       </div>
 
-      <h2 className="text-center text-t-dark text-3xl mt-auto mb-20">Shower</h2>
+      <h2 className="text-center text-t-dark text-3xl mt-auto mb-20">
+        {weatherContext?.weatherData?.current.condition_text}
+      </h2>
 
       <div className="flex justify-center items-center space-x-3 text-t-dark mb-5">
         <p>Today</p>
@@ -51,7 +60,11 @@ const Sidebar = () => {
       </div>
       <div className="flex justify-center items-center text-t-dark space-x-3">
         <FaLocationDot />
-        <p>Jakarta</p>
+        <p>
+          {weatherContext?.weatherData?.cityName}
+          {", "}
+          {weatherContext?.weatherData?.country}
+        </p>
       </div>
     </aside>
   );

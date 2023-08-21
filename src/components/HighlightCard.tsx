@@ -2,7 +2,7 @@ import React from "react";
 
 interface HighlightCardProps {
   title: string;
-  subtitle: string;
+  subtitle: string | number | undefined;
   measure: string;
   children?: React.ReactNode;
 }
