@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { FaLocationArrow } from "react-icons/fa6";
 import DailyCard from "./DailyCard";
 import HighlightCard from "./HighlightCard";
@@ -11,7 +12,12 @@ const MainTab = () => {
   const weatherContext = React.useContext(WeatherContext);
 
   return (
-    <section className="pt-6 flex-1 px-4 lg:px-10 xl:px-20 pb-5">
+    <motion.section
+      initial={{ opacity: 0, translateY: 30 }}
+      transition={{ duration: 0.35, delay: 0.85 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      className="pt-6 flex-1 px-4 lg:px-10 xl:px-20 pb-4"
+    >
       <ButtonTab
         changeMeasurement={measurementContext!.changeMeasurement}
         measurement={measurementContext!.measurement}
@@ -23,7 +29,7 @@ const MainTab = () => {
 
       <h1 className="text-2xl font-bold mb-5">Today's Highlights</h1>
       <HighlightTab {...weatherContext?.weatherData?.current} />
-    </section>
+    </motion.section>
   );
 };
 
