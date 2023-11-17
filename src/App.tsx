@@ -1,45 +1,10 @@
-import Sidebar from './components/Sidebar/Sidebar';
-import MainTab from './components/MainTab';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { getWeatherReport } from './api';
-import { WeatherContext } from './hooks/WeatherProvider';
 import { ImSpinner2 } from 'react-icons/im';
+import MainTab from './components/MainTab';
+import Sidebar from './components/Sidebar/Sidebar';
+import useGetWeather from './hooks/useGetWeather';
 
 const App = () => {
-  const weatherContext = useContext(WeatherContext);
-  const [latlong, setLatLong] = useState<
-    { latitude: number; longitude: number } | undefined
-  >(undefined);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const getWeatherData = useCallback(
-    async (lat: number, long: number) => {
-      const data = await getWeatherReport(lat, long);
-      weatherContext?.setWeatherData(data!);
-      setIsLoading(false);
-    },
-    [weatherContext]
-  );
-
-  useEffect(() => {
-    if (latlong && isLoading) {
-      getWeatherData(latlong.latitude, latlong.longitude);
-    } else if (!latlong && isLoading) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setLatLong({
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          });
-        },
-        (err) => {
-          if (err.code == err.PERMISSION_DENIED) {
-            setIsLoading(false);
-          }
-        }
-      );
-    }
-  }, [latlong, isLoading, getWeatherData]);
+  const { isLoading, latlong } = useGetWeather();
 
   if (isLoading) {
     return (

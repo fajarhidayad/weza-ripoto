@@ -1,11 +1,12 @@
+import { getWeatherReport } from '@/api';
+import BgCloud from '@/assets/img/Cloud-background.png';
 import { weatherIcon } from '@/assets/weatherCodes';
 import { MeasurementContext } from '@/hooks/MeasurementContextProvider';
 import { WeatherContext } from '@/hooks/WeatherProvider';
 import { getIcon } from '@/iconography';
+import { motion } from 'framer-motion';
 import moment from 'moment';
 import React from 'react';
-import { motion } from 'framer-motion';
-import BgCloud from '@/assets/img/Cloud-background.png';
 import { BiCurrentLocation } from 'react-icons/bi';
 import { FaLocationDot } from 'react-icons/fa6';
 
@@ -20,8 +21,18 @@ const MainSidebar: React.FC<{ setSearchTab: (status: boolean) => void }> = (
   const icon = weatherIcon.find(
     (item) => item.code === weatherContext?.weatherData?.current.condition_code
   );
-
   const iconSrc = getIcon(icon!.icon);
+
+  function setCurrentLocation() {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const data = await getWeatherReport(
+        pos.coords.latitude,
+        pos.coords.longitude
+      );
+
+      weatherContext?.setWeatherData(data!);
+    });
+  }
 
   const temp =
     measurementContext?.measurement === 'C'
@@ -42,7 +53,10 @@ const MainSidebar: React.FC<{ setSearchTab: (status: boolean) => void }> = (
           Search for places
         </button>
 
-        <button className="bg-[#6E707A] p-2 text-white rounded-full h-12 w-12 flex items-center justify-center">
+        <button
+          onClick={setCurrentLocation}
+          className="bg-[#6E707A] p-2 text-white rounded-full h-12 w-12 flex items-center justify-center"
+        >
           <BiCurrentLocation className="text-xl lg:text-2xl" />
         </button>
       </motion.div>

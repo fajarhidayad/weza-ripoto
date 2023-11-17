@@ -11,7 +11,7 @@ const Sidebar = () => {
       initial={{ translateX: '-400px' }}
       animate={{ translateX: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col lg:w-[400px] bg-primary py-4 lg:py-8 overflow-hidden min-h-screen"
+      className="flex flex-col lg:w-[400px] bg-primary py-4 lg:py-8 overflow-hidden min-h-[100svh]"
     >
       {activeSearchTab ? (
         <SearchTab setSearchTab={setActiveSearchTab} />
