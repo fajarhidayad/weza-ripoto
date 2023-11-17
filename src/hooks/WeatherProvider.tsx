@@ -1,5 +1,5 @@
-import { createContext, ReactNode, useState } from "react";
-import type { WeatherData } from "../api";
+import { createContext, ReactNode, useState } from 'react';
+import type { WeatherData } from '../api/types';
 
 interface WeatherContextType {
   weatherData: WeatherData | undefined;

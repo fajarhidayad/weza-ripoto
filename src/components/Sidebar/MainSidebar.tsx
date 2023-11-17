@@ -1,33 +1,13 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { BiCurrentLocation } from "react-icons/bi";
-import { FaLocationDot } from "react-icons/fa6";
-import BgCloud from "../assets/img/Cloud-background.png";
-import { MeasurementContext } from "../hooks/MeasurementContextProvider";
-import { WeatherContext } from "../hooks/WeatherProvider";
-import moment from "moment";
-import { weatherIcon } from "../assets/weatherCodes";
-import { getIcon } from "../iconography";
-import SearchTab from "./SearchTab";
-
-const Sidebar = () => {
-  const [activeSearchTab, setActiveSearchTab] = React.useState(false);
-
-  return (
-    <motion.aside
-      initial={{ translateX: "-400px" }}
-      animate={{ translateX: 0 }}
-      transition={{ duration: 0.5 }}
-      className="flex flex-col lg:w-[400px] bg-primary py-4 lg:py-8 overflow-hidden min-h-screen"
-    >
-      {activeSearchTab ? (
-        <SearchTab setSearchTab={setActiveSearchTab} />
-      ) : (
-        <MainSidebar setSearchTab={setActiveSearchTab} />
-      )}
-    </motion.aside>
-  );
-};
+import { weatherIcon } from '@/assets/weatherCodes';
+import { MeasurementContext } from '@/hooks/MeasurementContextProvider';
+import { WeatherContext } from '@/hooks/WeatherProvider';
+import { getIcon } from '@/iconography';
+import moment from 'moment';
+import React from 'react';
+import { motion } from 'framer-motion';
+import BgCloud from '@/assets/img/Cloud-background.png';
+import { BiCurrentLocation } from 'react-icons/bi';
+import { FaLocationDot } from 'react-icons/fa6';
 
 const MainSidebar: React.FC<{ setSearchTab: (status: boolean) => void }> = (
   props
@@ -35,7 +15,7 @@ const MainSidebar: React.FC<{ setSearchTab: (status: boolean) => void }> = (
   const measurementContext = React.useContext(MeasurementContext);
   const weatherContext = React.useContext(WeatherContext);
   const today = new Date();
-  const now = moment(today).format("dddd, D MMM");
+  const now = moment(today).format('dddd, D MMM');
 
   const icon = weatherIcon.find(
     (item) => item.code === weatherContext?.weatherData?.current.condition_code
@@ -44,7 +24,7 @@ const MainSidebar: React.FC<{ setSearchTab: (status: boolean) => void }> = (
   const iconSrc = getIcon(icon!.icon);
 
   const temp =
-    measurementContext?.measurement === "C"
+    measurementContext?.measurement === 'C'
       ? weatherContext?.weatherData?.current.temp_c
       : weatherContext?.weatherData?.current.temp_f;
   return (
@@ -128,7 +108,7 @@ const MainSidebar: React.FC<{ setSearchTab: (status: boolean) => void }> = (
         <FaLocationDot />
         <p>
           {weatherContext?.weatherData?.cityName}
-          {", "}
+          {', '}
           {weatherContext?.weatherData?.country}
         </p>
       </motion.div>
@@ -136,4 +116,4 @@ const MainSidebar: React.FC<{ setSearchTab: (status: boolean) => void }> = (
   );
 };
 
-export default Sidebar;
+export default MainSidebar;

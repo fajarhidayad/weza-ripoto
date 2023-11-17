@@ -1,11 +1,11 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { FaLocationArrow } from "react-icons/fa6";
-import DailyCard from "./DailyCard";
-import HighlightCard from "./HighlightCard";
-import { MeasurementContext } from "../hooks/MeasurementContextProvider";
-import { WeatherContext } from "../hooks/WeatherProvider";
-import { CurrentWeatherType, ForecastDayType } from "../api";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FaLocationArrow } from 'react-icons/fa6';
+import DailyCard from './DailyCard';
+import HighlightCard from './HighlightCard';
+import { MeasurementContext } from '../hooks/MeasurementContextProvider';
+import { WeatherContext } from '../hooks/WeatherProvider';
+import { CurrentWeatherType, ForecastDayType } from '../api/types';
 
 const MainTab = () => {
   const measurementContext = React.useContext(MeasurementContext);
@@ -34,13 +34,13 @@ const MainTab = () => {
 };
 
 const ButtonTab = (props: {
-  measurement: "C" | "F";
-  changeMeasurement: (type: "C" | "F") => void;
+  measurement: 'C' | 'F';
+  changeMeasurement: (type: 'C' | 'F') => void;
 }) => {
-  const activeButtonClass = "bg-t-light text-dark";
-  const inactiveButtonClass = "text-t-light bg-[#585676]";
+  const activeButtonClass = 'bg-t-light text-dark';
+  const inactiveButtonClass = 'text-t-light bg-[#585676]';
 
-  const buttonCheck = (type: "C" | "F") => {
+  const buttonCheck = (type: 'C' | 'F') => {
     return type === props.measurement ? activeButtonClass : inactiveButtonClass;
   };
 
@@ -48,17 +48,17 @@ const ButtonTab = (props: {
     <div className="flex justify-end items-center mb-6 space-x-3">
       <button
         className={`w-10 h-10 rounded-full font-bold text-lg ${buttonCheck(
-          "C"
+          'C'
         )}`}
-        onClick={() => props.changeMeasurement("C")}
+        onClick={() => props.changeMeasurement('C')}
       >
         &deg;C
       </button>
       <button
         className={`w-10 h-10 rounded-full font-bold text-lg ${buttonCheck(
-          "F"
+          'F'
         )}`}
-        onClick={() => props.changeMeasurement("F")}
+        onClick={() => props.changeMeasurement('F')}
       >
         &deg;F
       </button>
@@ -67,7 +67,7 @@ const ButtonTab = (props: {
 };
 
 const DailyTab = (props: {
-  measurement: "C" | "F";
+  measurement: 'C' | 'F';
   forecast: ForecastDayType[];
 }) => {
   return (
@@ -77,8 +77,8 @@ const DailyTab = (props: {
           key={item.date}
           date={item.date}
           measurement={props.measurement}
-          maxTemp={props.measurement === "C" ? item.maxtemp_c : item.maxtemp_f}
-          minTemp={props.measurement === "C" ? item.mintemp_c : item.mintemp_f}
+          maxTemp={props.measurement === 'C' ? item.maxtemp_c : item.maxtemp_f}
+          minTemp={props.measurement === 'C' ? item.mintemp_c : item.mintemp_f}
           code={item.code}
         />
       ))}

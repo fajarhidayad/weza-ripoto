@@ -1,9 +1,9 @@
-import Sidebar from "./components/Sidebar";
-import MainTab from "./components/MainTab";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { getWeatherReport } from "./api";
-import { WeatherContext } from "./hooks/WeatherProvider";
-import { ImSpinner2 } from "react-icons/im";
+import Sidebar from './components/Sidebar/Sidebar';
+import MainTab from './components/MainTab';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { getWeatherReport } from './api';
+import { WeatherContext } from './hooks/WeatherProvider';
+import { ImSpinner2 } from 'react-icons/im';
 
 const App = () => {
   const weatherContext = useContext(WeatherContext);
@@ -72,7 +72,7 @@ const App = () => {
   }
 
   return (
-    <main className="bg-dark min-h-screen text-t-light flex flex-col lg:flex-row">
+    <main className="bg-dark min-h-[100svh] text-t-light flex flex-col lg:flex-row">
       <Sidebar />
       <MainTab />
     </main>
